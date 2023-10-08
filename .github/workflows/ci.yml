@@ -28,13 +28,13 @@ jobs:
         rust-version: stable
 
     - name: Install Solana
-      run: sh -c "$(curl -sSfL https://release.solana.com/v1.17.1/install)" && export PATH="/home/runner/.local/share/solana/install/active_release/bin:$PATH"
-
+      uses: metadaoproject/setup-solana@v1.0
+      
     - name: Generate keypair
       run: solana-keygen new
 
     - name: Install Anchor
-      run: yarn global add @project-serum/anchor-cli@${{ env.ANCHOR_VERSION }}
+      run: yarn global add @coral-xyz/anchor-cli@0.28.0
 
     - name: Install dependencies
       run: yarn && anchor test
