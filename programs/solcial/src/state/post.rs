@@ -41,7 +41,7 @@ pub struct UpdatePost<'info> {
 
 #[derive(Accounts)]
 pub struct DeletePost<'info> {
-    #[account(mut, has_one = author)]
+    #[account(mut, close = author, has_one = author)]
     pub post: Account<'info, Post>,
     pub author: Signer<'info>,
 }

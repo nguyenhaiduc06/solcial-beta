@@ -3,11 +3,14 @@ import { Keypair } from "@solana/web3.js";
 import { expect } from "chai";
 
 export default () => {
+  const postKeypair = Keypair.generate();
+
   it("can create a new post", async () => {
-    const postKeypair = Keypair.generate();
+    const content = "Content",
+      tag = "tag";
 
     await program.methods
-      .createPost("Hello world", "tag")
+      .createPost(content, tag)
       .accounts({
         author: user.publicKey,
         post: postKeypair.publicKey,
@@ -17,25 +20,41 @@ export default () => {
 
     const post = await program.account.post.fetch(postKeypair.publicKey);
 
-    expect(post.content).to.equal("Hello world");
+    expect(post.content).to.equal(content);
+    expect(post.tag).to.equal(tag);
+  });
+
+  it("can update post", async () => {
+    const newContent = "New content",
+      newTag = "new tag";
+
+    await program.methods
+      .updatePost(newContent, newTag)
+      .accounts({
+        author: user.publicKey,
+        post: postKeypair.publicKey,
+      })
+      .rpc();
+
+    const post = await program.account.post.fetch(postKeypair.publicKey);
+
+    expect(post.content).to.equal(newContent);
+    expect(post.tag).to.equal(newTag);
   });
 
   it("can delete post", async () => {
-    const postKeypair = Keypair.generate();
-
     await program.methods
-      .createPost("Hello world", "tag")
+      .deletePost()
       .accounts({
         author: user.publicKey,
         post: postKeypair.publicKey,
       })
-      .signers([postKeypair])
       .rpc();
 
-    const post = await program.account.post.fetch(postKeypair.publicKey);
+    const post = await program.account.post.fetchNullable(
+      postKeypair.publicKey
+    );
 
-    console.log(post);
-
-    expect(post.content).to.equal("Hello world");
+    expect(post).to.be.null;
   });
 };

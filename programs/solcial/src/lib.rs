@@ -36,4 +36,16 @@ pub mod solcial {
     pub fn create_post(ctx: Context<CreatePost>, content: String, tag: String) -> Result<()> {
         instructions::create_post(ctx, content, tag)
     }
+
+    pub fn update_post(
+        ctx: Context<UpdatePost>,
+        new_content: String,
+        new_tag: String,
+    ) -> Result<()> {
+        instructions::update_post(ctx, new_content, new_tag)
+    }
+
+    pub fn delete_post(ctx: Context<DeletePost>) -> Result<()> {
+        instructions::delete_post(ctx)
+    }
 }

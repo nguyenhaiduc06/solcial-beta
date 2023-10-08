@@ -24,10 +24,24 @@ pub fn create_post(ctx: Context<CreatePost>, content: String, tag: String) -> Re
     Ok(())
 }
 
-pub fn update_post() -> Result<()> {
+pub fn update_post(ctx: Context<UpdatePost>, new_content: String, new_tag: String) -> Result<()> {
+    let post = &mut ctx.accounts.post;
+
+    require!(
+        new_content.chars().count() <= MAX_CONTENT_CHAR_COUNT,
+        ErrorCode::TooLong
+    );
+    require!(
+        new_tag.chars().count() <= MAX_TAG_CHAR_COUNT,
+        ErrorCode::TooLong
+    );
+
+    post.content = new_content;
+    post.tag = new_tag.to_lowercase();
+
     Ok(())
 }
 
-pub fn delete_post() -> Result<()> {
+pub fn delete_post(_ctx: Context<DeletePost>) -> Result<()> {
     Ok(())
 }
