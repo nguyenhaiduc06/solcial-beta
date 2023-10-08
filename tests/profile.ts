@@ -1,16 +1,9 @@
 import * as anchor from "@coral-xyz/anchor";
-import { Program } from "@coral-xyz/anchor";
-import { Solcial } from "../target/types/solcial";
+import { user, program } from ".";
 import { PublicKey } from "@solana/web3.js";
-import { expect, use } from "chai";
+import { expect } from "chai";
 
-describe("solcial", () => {
-  // Configure the client to use the local cluster.
-  anchor.setProvider(anchor.AnchorProvider.env());
-
-  const program = anchor.workspace.Solcial as Program<Solcial>;
-  const user = (program.provider as anchor.AnchorProvider).wallet;
-
+export default () => {
   it("can create a new profile!", async () => {
     const name = "Name",
       username = "username",
@@ -79,4 +72,4 @@ describe("solcial", () => {
 
     expect(profile).to.be.null;
   });
-});
+};
