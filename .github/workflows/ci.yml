@@ -27,7 +27,7 @@ jobs:
           rust-version: stable
 
       - name: Install Solana
-      - uses: ./.github/actions/setup-solana/
+        uses: ./.github/actions/setup-solana/
 
       - name: Install Anchor
         run: yarn global add @project-serum/anchor-cli@${{ env.ANCHOR_VERSION }}
