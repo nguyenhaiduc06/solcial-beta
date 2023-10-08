@@ -77,4 +77,4 @@ jobs:
         run: yarn global add @coral-xyz/anchor-cli@${{ env.ANCHOR_VERSION }}
 
       - name: Run tests
-        run: yarn && anchor test
+        run: yarn && cargo install && cd programs/solcial && cargo install && cd ../../ && anchor test
