@@ -64,4 +64,12 @@ pub mod solcial {
     pub fn delete_comment(ctx: Context<DeleteComment>) -> Result<()> {
         instructions::delete_comment(ctx)
     }
+
+    pub fn create_like(ctx: Context<CreateLike>, post: Pubkey) -> Result<()> {
+        instructions::create_like(ctx, post)
+    }
+
+    pub fn delete_like(ctx: Context<DeleteLike>) -> Result<()> {
+        instructions::delete_like(ctx)
+    }
 }
