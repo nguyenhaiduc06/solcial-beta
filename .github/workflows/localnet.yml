@@ -65,6 +65,9 @@ jobs:
         run: solana config set --url localhost
         shell: bash
 
+      - name: Anchor.toml localnet
+        run: cp Anchor.localnet.toml Anchor.toml
+
       - name: Copy wallet
         run: echo ${{ secrets.WALLET }} > wallet.json
 
