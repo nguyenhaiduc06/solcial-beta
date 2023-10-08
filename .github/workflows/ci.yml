@@ -75,3 +75,6 @@ jobs:
 
       - name: Install Anchor
         run: yarn global add @coral-xyz/anchor-cli@${{ env.ANCHOR_VERSION }}
+
+      - name: Run tests
+        run: yarn && anchor test
