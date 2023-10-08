@@ -32,4 +32,8 @@ pub mod solcial {
     pub fn delete_profile(ctx: Context<DeleteProfile>) -> Result<()> {
         instructions::delete_profile(ctx)
     }
+
+    pub fn create_post(ctx: Context<CreatePost>, content: String, tag: String) -> Result<()> {
+        instructions::create_post(ctx, content, tag)
+    }
 }
