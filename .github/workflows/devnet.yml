@@ -1,17 +1,17 @@
-name: localnet
+name: devnet
 
 on:
   push:
-    branches: ["localnet"]
+    branches: ["devnet"]
   pull_request:
-    branches: ["localnet"]
+    branches: ["devnet"]
 
 env:
   ANCHOR_VERSION: 0.28.0
   SOLANA_VERSION: 1.17.1
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
 
     steps:
@@ -54,30 +54,28 @@ jobs:
         run: |
           sh -c "$(curl -sSfL https://release.solana.com/v1.17.1/install)"
 
-      - name: Setup Solana Path
+      - name: Setup Solana PATH
         run: |
           echo "$HOME/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
           export PATH="/home/runner/.local/share/solana/install/active_release/bin:$PATH"
           solana --version
           solana config get
 
-      # - run: solana-keygen new --no-bip39-passphrase -o wallet.json
-      #   shell: bash
-
-      - run: solana config set --url localhost
+      - name: Set Solana URL to devnet
+        run: solana config set --url devnet
         shell: bash
 
-      - run: echo ${{ secrets.WALLET }} > wallet.json
+      - name: Copy wallet
+        run: echo ${{ secrets.WALLET }} > wallet.json
 
       - name: Install Anchor
         run: yarn global add @coral-xyz/anchor-cli@${{ env.ANCHOR_VERSION }}
 
-      - run: yarn
+      - name: Install dependencies
+        run: yarn
 
       - name: Cache build
         uses: Swatinem/rust-cache@v1
 
-      # - name: Build program
-      #   run: cargo build
-
-      - run: anchor test
+      - name: Execute tests
+        run: anchor test
