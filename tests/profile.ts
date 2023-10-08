@@ -3,7 +3,7 @@ import { user, program } from ".";
 import { PublicKey } from "@solana/web3.js";
 import { expect } from "chai";
 
-export default () => {
+describe("profile", () => {
   it("can create a new profile!", async () => {
     const name = "Name",
       username = "username",
@@ -72,4 +72,4 @@ export default () => {
 
     expect(profile).to.be.null;
   });
-};
+});

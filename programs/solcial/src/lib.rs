@@ -48,4 +48,20 @@ pub mod solcial {
     pub fn delete_post(ctx: Context<DeletePost>) -> Result<()> {
         instructions::delete_post(ctx)
     }
+
+    pub fn create_comment(
+        ctx: Context<CreateComment>,
+        content: String,
+        post: Pubkey,
+    ) -> Result<()> {
+        instructions::create_comment(ctx, content, post)
+    }
+
+    pub fn update_comment(ctx: Context<UpdateComment>, new_content: String) -> Result<()> {
+        instructions::udpate_comment(ctx, new_content)
+    }
+
+    pub fn delete_comment(ctx: Context<DeleteComment>) -> Result<()> {
+        instructions::delete_comment(ctx)
+    }
 }

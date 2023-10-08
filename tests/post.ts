@@ -2,7 +2,7 @@ import { user, program } from ".";
 import { Keypair } from "@solana/web3.js";
 import { expect } from "chai";
 
-export default () => {
+describe("post", () => {
   const postKeypair = Keypair.generate();
 
   it("can create a new post", async () => {
@@ -57,4 +57,4 @@ export default () => {
 
     expect(post).to.be.null;
   });
-};
+});
