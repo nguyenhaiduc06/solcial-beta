@@ -12,13 +12,17 @@ describe("solcial", () => {
   const user = (program.provider as anchor.AnchorProvider).wallet;
 
   it("can create a new profile!", async () => {
+    const name = "Name",
+      username = "username",
+      bio = "Biography 🌲";
+
     const [profilePDA, _] = PublicKey.findProgramAddressSync(
       [anchor.utils.bytes.utf8.encode("profile"), user.publicKey.toBuffer()],
       program.programId
     );
 
     await program.methods
-      .createProfile("username")
+      .createProfile(name, username, bio)
       .accounts({
         user: user.publicKey,
         profile: profilePDA,
@@ -27,17 +31,23 @@ describe("solcial", () => {
 
     const profile = await program.account.profile.fetch(profilePDA);
 
-    expect(profile.username).to.equal("username");
+    expect(profile.name).to.equal(name);
+    expect(profile.username).to.equal(username);
+    expect(profile.bio).to.equal(bio);
   });
 
   it("can update profile!", async () => {
+    const newName = "New name",
+      newUsername = "newusername",
+      newBio = "New biography 🌲";
+
     const [profilePDA, _] = PublicKey.findProgramAddressSync(
       [anchor.utils.bytes.utf8.encode("profile"), user.publicKey.toBuffer()],
       program.programId
     );
 
     await program.methods
-      .updateProfile("newusername")
+      .updateProfile(newName, newUsername, newBio)
       .accounts({
         user: user.publicKey,
         profile: profilePDA,
@@ -46,7 +56,9 @@ describe("solcial", () => {
 
     const profile = await program.account.profile.fetch(profilePDA);
 
-    expect(profile.username).to.equal("newusername");
+    expect(profile.name).to.equal(newName);
+    expect(profile.username).to.equal(newUsername);
+    expect(profile.bio).to.equal(newBio);
   });
 
   it("can delete profile", async () => {

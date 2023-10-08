@@ -11,12 +11,22 @@ declare_id!("Z85hXczHvADAyPsa56QW1WUwhu1bUJbo6sQaaFhM1Fy");
 pub mod solcial {
     use super::*;
 
-    pub fn create_profile(ctx: Context<CreateProfile>, username: String) -> Result<()> {
-        instructions::create_profile(ctx, username)
+    pub fn create_profile(
+        ctx: Context<CreateProfile>,
+        name: String,
+        username: String,
+        bio: String,
+    ) -> Result<()> {
+        instructions::create_profile(ctx, name, username, bio)
     }
 
-    pub fn update_profile(ctx: Context<UpdateProfile>, new_username: String) -> Result<()> {
-        instructions::update_profile(ctx, new_username)
+    pub fn update_profile(
+        ctx: Context<UpdateProfile>,
+        new_name: String,
+        new_username: String,
+        new_bio: String,
+    ) -> Result<()> {
+        instructions::update_profile(ctx, new_name, new_username, new_bio)
     }
 
     pub fn delete_profile(ctx: Context<DeleteProfile>) -> Result<()> {
