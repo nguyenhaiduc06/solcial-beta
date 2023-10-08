@@ -1,0 +1,85 @@
+name: Reusable Tests
+
+on:
+  workflow_call:
+    inputs:
+      cache:
+        required: true
+        type: boolean
+      solana_cli_version:
+        required: true
+        type: string
+      solang_version:
+        required: true
+        type: string
+      node_version:
+        required: true
+        type: string
+      cargo_profile:
+        required: true
+        type: string
+      anchor_binary_name:
+        required: true
+        type: string
+env:
+  CACHE: inputs.cache
+  SOLANA_CLI_VERSION: ${{ inputs.solana_cli_version }}
+  SOLANG_VERSION: ${{ inputs.solang_version }}
+  NODE_VERSION: ${{ inputs.node_version }}
+  CARGO_PROFILE: ${{ inputs.cargo_profile }}
+  ANCHOR_BINARY_NAME: ${{ inputs.anchor_binary_name }}
+  CARGO_CACHE_PATH: |
+    ~/.cargo/bin/
+    ~/.cargo/registry/index/
+    ~/.cargo/registry/cache/
+    ~/.cargo/git/db/
+    ./target/
+
+jobs:
+  setup-anchor-cli:
+    name: Setup Anchor cli
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup/
+      - uses: actions/cache@v3
+        if: ${{ env.CACHE != 'false' }}
+        name: Cache Cargo registry + index
+        id: cache-anchor
+        with:
+          path: ${{ env.CARGO_CACHE_PATH }}
+          key: cargo-${{ runner.os }}-${{ env.CARGO_PROFILE }}-anchor-${{ hashFiles('**/Cargo.lock') }}
+
+      - run: cargo install --path cli anchor-cli --locked --force --debug
+        if: env.CARGO_PROFILE == 'debug'
+      - run: cargo install --path cli anchor-cli --locked --force
+        if: env.CARGO_PROFILE != 'debug'
+
+      - run: chmod +x ~/.cargo/bin/anchor
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.ANCHOR_BINARY_NAME }}
+          path: ~/.cargo/bin/anchor
+
+      - uses: ./.github/actions/git-diff/
+
+  test-program:
+    needs: setup-anchor-cli
+    name: Test Program
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.ANCHOR_BINARY_NAME }}
+          path: ~/.cargo/bin/
+      - run: chmod +rwx ~/.cargo/bin/anchor
+
+      - uses: ./.github/actions/setup/
+      - uses: ./.github/actions/setup-solana/
+      - uses: ./.github/actions/setup-ts/
+
+      - run: yarn test
+      - uses: ./.github/actions/git-diff/

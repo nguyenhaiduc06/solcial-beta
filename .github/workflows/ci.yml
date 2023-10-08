@@ -1,43 +1,21 @@
-name: CI 
+name: Tests
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
-
-env:
-  CARGO_TERM_COLOR: always
+    branches:
+      - main
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v3.8.1
-      with:
-        node-version: 18.x
-    
-    - name: Install Rust
-      uses: ATiltedTree/setup-rust@v1
-      with:
-        rust-version: stable
-
-    - name: Install Solana
-      uses: metadaoproject/setup-solana@v1.0
-      
-    - name: Generate keypair
-      run: solana-keygen new
-
-    - name: Install Anchor
-      run: yarn global add @coral-xyz/anchor-cli@0.28.0
-
-    - name: Install dependencies
-      run: yarn && anchor test
-      
-
-      
+  tests:
+    name: Reusable
+    uses: ./.github/workflows/reusable-tests.yaml
+    with:
+      cache: true
+      solana_cli_version: 1.17.0
+      solang_version: 0.3.2
+      node_version: 18.18.0
+      cargo_profile: debug
+      anchor_binary_name: anchor-binary
