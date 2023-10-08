@@ -1,0 +1,35 @@
+name: CI 
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v3.8.1
+      with:
+        node-version: 18.x
+    
+    - name: Install Rust
+      run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+    - name: Install Solana
+      run: sh -c "$(curl -sSfL https://release.solana.com/v1.17.1/install)"
+
+    - name: Install Anchor
+      run: yarn global add @project-serum/anchor-cli@${{ env.ANCHOR_VERSION }}
+      
+
+      
