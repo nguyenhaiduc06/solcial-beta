@@ -30,8 +30,14 @@ jobs:
     - name: Install Solana
       run: sh -c "$(curl -sSfL https://release.solana.com/v1.17.1/install)"
 
+    - name: Generate keypair
+      run: solana-keygen new
+
     - name: Install Anchor
       run: yarn global add @project-serum/anchor-cli@${{ env.ANCHOR_VERSION }}
+
+    - name: Install dependencies
+      run: yarn && anchor test
       
 
       
