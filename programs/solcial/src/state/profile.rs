@@ -14,26 +14,18 @@ pub const MAX_NAME_CHAR_COUNT: usize = 20;
 pub const MAX_USERNAME_CHAR_COUNT: usize = 20;
 pub const MAX_BIO_CHAR_COUNT: usize = 50;
 
-const MAX_NAME_LENGTH: usize = MAX_NAME_CHAR_COUNT * 4;
-const MAX_USERNAME_LENGTH: usize = MAX_USERNAME_CHAR_COUNT * 4;
-const MAX_BIO_LENGTH: usize = MAX_BIO_CHAR_COUNT * 4;
-const BUMP_LENGTH: usize = 1;
+const NAME_SPACE: usize = STRING_LENGTH_PREFIX_SPACE + MAX_NAME_CHAR_COUNT * 4;
+const USERNAME_SPACE: usize = STRING_LENGTH_PREFIX_SPACE + MAX_USERNAME_CHAR_COUNT * 4;
+const BIO_SPACE: usize = STRING_LENGTH_PREFIX_SPACE + MAX_BIO_CHAR_COUNT * 4;
+const BUMP_SPACE: usize = 1;
 
 impl Profile {
-    const LEN: usize = DISCRIMINATOR_LENGTH
-        + PUBLIC_KEY_LENGTH
-        + STRING_LENGTH_PREFIX
-        + MAX_NAME_LENGTH
-        + STRING_LENGTH_PREFIX
-        + MAX_USERNAME_LENGTH
-        + STRING_LENGTH_PREFIX
-        + MAX_BIO_LENGTH
-        + BUMP_LENGTH;
+    const SPACE: usize = DISCRIMINATOR_SPACE + NAME_SPACE + USERNAME_SPACE + BIO_SPACE + BUMP_SPACE;
 }
 
 #[derive(Accounts)]
 pub struct CreateProfile<'info> {
-    #[account(init, payer = user, space = Profile::LEN, seeds = [b"profile", user.key().as_ref()], bump)]
+    #[account(init, payer = user, space = Profile::SPACE, seeds = [b"profile", user.key().as_ref()], bump)]
     pub profile: Account<'info, Profile>,
     pub system_program: Program<'info, System>,
     #[account(mut)]

@@ -1,3 +1,3 @@
-pub const DISCRIMINATOR_LENGTH: usize = 8;
-pub const PUBLIC_KEY_LENGTH: usize = 32;
-pub const STRING_LENGTH_PREFIX: usize = 4;
+pub const DISCRIMINATOR_SPACE: usize = 8;
+pub const PUBKEY_SPACE: usize = 32;
+pub const STRING_LENGTH_PREFIX_SPACE: usize = 4;
