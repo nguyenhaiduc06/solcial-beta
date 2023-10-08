@@ -28,7 +28,7 @@ jobs:
         rust-version: stable
 
     - name: Install Solana
-      run: sh -c "$(curl -sSfL https://release.solana.com/v1.17.1/install)"
+      run: sh -c "$(curl -sSfL https://release.solana.com/v1.17.1/install)" && export PATH="/home/runner/.local/share/solana/install/active_release/bin:$PATH"
 
     - name: Generate keypair
       run: solana-keygen new
