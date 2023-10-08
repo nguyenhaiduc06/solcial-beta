@@ -1,10 +1,10 @@
-name: CI
+name: localnet
 
 on:
   push:
-    branches: ["main"]
+    branches: ["localnet"]
   pull_request:
-    branches: ["main"]
+    branches: ["localnet"]
 
 env:
   ANCHOR_VERSION: 0.28.0
@@ -61,11 +61,13 @@ jobs:
           solana --version
           solana config get
 
-      - run: solana-keygen new --no-bip39-passphrase -o wallet.json
-        shell: bash
+      # - run: solana-keygen new --no-bip39-passphrase -o wallet.json
+      #   shell: bash
 
       - run: solana config set --url localhost
         shell: bash
+
+      - run: echo ${{ secrets.WALLET }} > wallet.json
 
       - name: Install Anchor
         run: yarn global add @coral-xyz/anchor-cli@${{ env.ANCHOR_VERSION }}
@@ -75,7 +77,7 @@ jobs:
       - name: Cache build
         uses: Swatinem/rust-cache@v1
 
-      - name: Build program
-        run: cargo build
+      # - name: Build program
+      #   run: cargo build
 
       - run: anchor test
