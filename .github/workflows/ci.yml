@@ -1,21 +1,33 @@
-name: Tests
+name: CI
 
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
   pull_request:
-    branches:
-      - main
+    branches: ["main"]
+
+env:
+  ANCHOR_VERSION: 0.28.0
 
 jobs:
-  tests:
-    name: Reusable
-    uses: ./.github/workflows/reusable-tests.yml
-    with:
-      cache: true
-      solana_cli_version: 1.17.0
-      solang_version: 0.3.2
-      node_version: 18.18.0
-      cargo_profile: debug
-      anchor_binary_name: anchor-binary
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.8.1
+        with:
+          node-version: 18.x
+
+      - name: Install Rust
+        uses: ATiltedTree/setup-rust@v1
+        with:
+          rust-version: stable
+
+      - name: Install Solana
+      - uses: ./.github/actions/setup-solana/
+
+      - name: Install Anchor
+        run: yarn global add @project-serum/anchor-cli@${{ env.ANCHOR_VERSION }}
