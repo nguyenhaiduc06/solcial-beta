@@ -46,6 +46,7 @@ jobs:
           export PATH="/home/runner/.local/share/solana/install/active_release/bin:$PATH"
           solana --version
           solana config get
+          solana-keygen new
 
       - name: Install Anchor
-        run: yarn global add @project-serum/anchor-cli@${{ env.ANCHOR_VERSION }}
+        run: yarn global add @coral-xyz/anchor-cli@${{ env.ANCHOR_VERSION }}
