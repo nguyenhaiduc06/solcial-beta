@@ -70,5 +70,12 @@ jobs:
       - name: Install Anchor
         run: yarn global add @coral-xyz/anchor-cli@${{ env.ANCHOR_VERSION }}
 
-      - name: Run tests
-        run: anchor test
+      - run: yarn
+
+      - name: Cache build
+        uses: Swatinem/rust-cache@v1
+
+      - name: Build program
+        run: cargo build
+
+      - run: anchor test
