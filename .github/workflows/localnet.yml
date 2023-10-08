@@ -61,16 +61,6 @@ jobs:
           solana --version
           solana config get
 
-      - name: Set Solana URL to localhost
-        run: solana config set --url localhost
-        shell: bash
-
-      - name: Anchor.toml localnet
-        run: cp Anchor.localnet.toml Anchor.toml
-
-      - name: Copy wallet
-        run: echo ${{ secrets.WALLET }} > wallet.json
-
       - name: Install Anchor
         run: yarn global add @coral-xyz/anchor-cli@${{ env.ANCHOR_VERSION }}
 
@@ -79,6 +69,13 @@ jobs:
 
       - name: Cache build
         uses: Swatinem/rust-cache@v1
+
+      - name: Localnet config
+        run: |
+          solana config set --url localhost
+          cp Anchor.localnet.toml Anchor.toml
+          echo ${{ secrets.WALLET }} > wallet.json
+        shell: bash
 
       - name: Execute tests
         run: anchor test
