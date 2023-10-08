@@ -42,7 +42,7 @@ export default () => {
     expect(post.tag).to.equal(newTag);
   });
 
-  it("can delete post", async () => {
+  it("can delete", async () => {
     await program.methods
       .deletePost()
       .accounts({
